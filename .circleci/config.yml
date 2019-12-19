@@ -162,6 +162,59 @@ jobs:
           - POSTGRES_USER=postgres
           - POSTGRES_DB=statesman_test
     steps: *steps
+  build-ruby270-rails-600-mysql:
+    docker:
+      - image: circleci/ruby:2.7.0-rc1-node
+        environment:
+          - RAILS_VERSION=6.0.0
+          - DATABASE_URL=mysql2://root@127.0.0.1/statesman_test
+          - DATABASE_DEPENDENCY_PORT=3306
+      - image: circleci/mysql:5.7.18
+        environment:
+          - MYSQL_ALLOW_EMPTY_PASSWORD=true
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=
+          - MYSQL_DATABASE=statesman_test
+    steps: *steps
+  build-ruby270-rails-600-postgres:
+    docker:
+      - image: circleci/ruby:2.7.0-rc1-node
+        environment:
+          - RAILS_VERSION=6.0.0
+          - DATABASE_URL=postgres://postgres@localhost/statesman_test
+          - DATABASE_DEPENDENCY_PORT=5432
+      - image: circleci/postgres:9.6
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_DB=statesman_test
+    steps: *steps
+  build-ruby270-rails-master-mysql:
+    docker:
+      - image: circleci/ruby:2.7.0-rc1-node
+        environment:
+          - RAILS_VERSION=master
+          - DATABASE_URL=mysql2://root@127.0.0.1/statesman_test
+          - DATABASE_DEPENDENCY_PORT=3306
+      - image: circleci/mysql:5.7.18
+        environment:
+          - MYSQL_ALLOW_EMPTY_PASSWORD=true
+          - MYSQL_USER=root
+          - MYSQL_PASSWORD=
+          - MYSQL_DATABASE=statesman_test
+    steps: *steps
+  build-ruby270-rails-master-postgres:
+    docker:
+      - image: circleci/ruby:2.7.0-rc1-node
+        environment:
+          - RAILS_VERSION=master
+          - DATABASE_URL=postgres://postgres@localhost/statesman_test
+          - EXCLUDE_MONGOID=true
+          - DATABASE_DEPENDENCY_PORT=5432
+      - image: circleci/postgres:9.6
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_DB=statesman_test
+    steps: *steps
   build-ruby249-rails-523-mysql:
     docker:
       - image: circleci/ruby:2.4.9-node
@@ -206,3 +259,7 @@ workflows:
       - build-ruby265-rails-600-postgres
       - build-ruby265-rails-master-mysql
       - build-ruby265-rails-master-postgres
+      - build-ruby270-rails-600-mysql
+      - build-ruby270-rails-600-postgres
+      - build-ruby270-rails-master-mysql
+      - build-ruby270-rails-master-postgres
